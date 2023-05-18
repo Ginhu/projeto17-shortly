@@ -20,19 +20,35 @@ export async function urlSubmission (req, res) {
     }
 } 
 
-export async function getUrlById (req, res) {
-    const {id} = req.params
+export function getUrlById (req, res) {
+    const {id, shortUrl, url} = res.locals
+
+    const body = {
+        id: id,
+        shortUrl: shortUrl,
+        url: url
+    }
+
+    res.status(200).send(body)
+}
+
+export async function getShortUrl (req, res) {
+    const {urlReg} = res.locals
+    const count = urlReg.visitCount +1
+    try {
+        await db.query(`UPDATE urls SET "visitCount"=$1 WHERE id=$2`, [count, urlReg.id])
+        res.redirect(302, urlReg.url)
+    } catch (err) {
+        console.log(err.message)
+    }
+}
+
+export async function deleteUrl (req, res) {
+    const {id} = res.locals
 
     try {
-        const getUrl = await db.query(`SELECT * FROM urls WHERE id=$1`, [id])
-        if(getUrl.rowCount === 0) return res.sendStatus(404)
-        const body = {
-            id: id,
-            shortUrl: getUrl.rows[0].shortUrl,
-            url: getUrl.rows[0].url
-        }
-
-        res.status(200).send(body)
+        await db.query(`DELETE FROM urls WHERE id=$1`, [id])
+        res.sendStatus(204)
     } catch (err) {
         console.log(err.message)
     }
