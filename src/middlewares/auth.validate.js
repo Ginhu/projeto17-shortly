@@ -34,13 +34,16 @@ export async function validateEmailPassword (req, res, next) {
 }
 
 export async function validateSession (req, res, next) {
-    const {Authorization} = req.headers
-    const token = Authorization?.replace("Bearer ", "")
+    const {authorization} = req.headers
+    const token = authorization?.replace("Bearer ", "")
 
     try { 
-        if(!Authorization) return res.sendStatus(401)
+        if(!authorization) return res.sendStatus(401)
         const session = await db.query(`SELECT * FROM sessions WHERE "sessionToken"=$1`, [token])
         if(session.rowCount === 0) return res.sendStatus(401)
+        res.locals.userId = session.rows[0].userId
+        
+        next()
     } catch (err) {
         console.log(err.message)
     }
