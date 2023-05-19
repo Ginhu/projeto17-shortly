@@ -5,9 +5,9 @@ import {db} from "../database/database.connection.js"
 export async function urlSubmission (req, res) {
     const {url, userId} = res.locals
     const shortUrl = nanoid(8)
-
+    const userIdInt = parseInt(userId)
     try {
-        await db.query(`INSERT INTO urls (url, "shortUrl", "userId") VALUES ($1, $2, $3)`, [url, shortUrl, userId])
+        await db.query(`INSERT INTO urls (url, "shortUrl", "userId") VALUES ($1, $2, $3)`, [url, shortUrl, userIdInt])
         
         const body = {
             "id": userId,
@@ -35,8 +35,9 @@ export function getUrlById (req, res) {
 export async function getShortUrl (req, res) {
     const {urlReg} = res.locals
     const count = urlReg.visitCount +1
+    const id = parseInt(urlReg.id)
     try {
-        await db.query(`UPDATE urls SET "visitCount"=$1 WHERE id=$2`, [count, urlReg.id])
+        await db.query(`UPDATE urls SET "visitCount"=$1 WHERE id=$2`, [count, id])
         res.redirect(302, urlReg.url)
     } catch (err) {
         console.log(err.message)
