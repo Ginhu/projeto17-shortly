@@ -28,7 +28,7 @@ CREATE TABLE public.sessions (
     id integer NOT NULL,
     "sessionToken" text NOT NULL,
     "userId" text NOT NULL,
-    "createdAt" date DEFAULT now() NOT NULL
+    "createdAt" timestamp without time zone DEFAULT now() NOT NULL
 );
 
 
@@ -62,7 +62,7 @@ CREATE TABLE public.urls (
     "shortUrl" text NOT NULL,
     "userId" text NOT NULL,
     "visitCount" integer DEFAULT 0 NOT NULL,
-    "createdAt" date DEFAULT now() NOT NULL
+    "createdAt" timestamp without time zone DEFAULT now() NOT NULL
 );
 
 
@@ -144,38 +144,42 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: sessions; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.sessions VALUES (1, '41880c62-dd43-49d6-9660-e2548179ee88', '1', '2023-05-18');
-INSERT INTO public.sessions VALUES (2, '1dc4caa6-2840-4cef-8f86-2af14ebbf0c0', '1', '2023-05-18');
-INSERT INTO public.sessions VALUES (3, '1b09b1ff-c68d-4364-82e5-944687d2c955', '2', '2023-05-18');
+INSERT INTO public.sessions VALUES (1, '5ae99aa4-85ad-4d74-9730-66841d594bdc', '2', '2023-05-19 11:10:36.429606');
+INSERT INTO public.sessions VALUES (2, 'cbcbf405-c7f2-4df2-ae00-673ea87e0bfa', '1', '2023-05-19 11:10:41.416934');
 
 
 --
 -- Data for Name: urls; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.urls VALUES (2, 'https://gin', 'fZezZPZx', '1', 0, '2023-05-18');
+INSERT INTO public.urls VALUES (3, 'https://gin111', 'sLcRvAgb', '1', 0, '2023-05-19 11:14:13.832711');
+INSERT INTO public.urls VALUES (4, 'https://gin2', 'TVUDr4pH', '2', 0, '2023-05-19 11:14:32.846944');
+INSERT INTO public.urls VALUES (5, 'https://gin22', 'l9WTMdt5', '2', 0, '2023-05-19 11:14:35.127447');
+INSERT INTO public.urls VALUES (6, 'https://gin222', 'DxU60zCq', '2', 3, '2023-05-19 11:14:36.858673');
+INSERT INTO public.urls VALUES (1, 'https://gin1', 'v1vjk0wj', '1', 2, '2023-05-19 11:14:04.277073');
+INSERT INTO public.urls VALUES (2, 'https://gin11', 'iQV9jkrY', '1', 2, '2023-05-19 11:14:09.944497');
 
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.users VALUES (1, 'Ginhu', 'gin@gin.com', '$2b$10$v4X9preD1ZJ3r6DW7nntBOmbhweLWJxNwBN8WFn8Tm9X/2DcTfsvu', '2023-05-18 09:51:53.324702');
-INSERT INTO public.users VALUES (2, 'Ginhu2', 'gin@gin2.com', '$2b$10$5UxeBwLJbc9Hh4kFRadYreJUX4sQAylBHfqB.6DB3uqwuDR4nJULa', '2023-05-18 15:21:22.265799');
+INSERT INTO public.users VALUES (1, 'Gin', 'gin@gin.com', '$2b$10$KphmD6TXzQ.5mNsLquyPM.8t/ad1pho4b7HyjIg3427tjvcUMdsAy', '2023-05-19 11:07:16.981389');
+INSERT INTO public.users VALUES (2, 'Gin2', 'gin2@gin.com', '$2b$10$n2l1DELLe1zM0Dv3PqMTPebq59yZEhKJgi1WiLVwLLej9RU60L9zO', '2023-05-19 11:07:27.072776');
 
 
 --
 -- Name: sessions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.sessions_id_seq', 3, true);
+SELECT pg_catalog.setval('public.sessions_id_seq', 2, true);
 
 
 --
 -- Name: urls_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.urls_id_seq', 3, true);
+SELECT pg_catalog.setval('public.urls_id_seq', 6, true);
 
 
 --
