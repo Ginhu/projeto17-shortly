@@ -1,5 +1,5 @@
-import {db} from "../database/database.connection.js"
 import {v4 as uuid} from "uuid"
+import { insertSigninData } from "../repositories/auth.repository.js"
 
 export async function signin(req, res) {
     const {userId} = res.locals
@@ -7,7 +7,7 @@ export async function signin(req, res) {
     const resToken = { token: token }
 
     try {
-        await db.query(`INSERT INTO sessions ("userId", "sessionToken") VALUES ($1, $2)`, [userId, token])
+        await insertSigninData(userId, token)
         res.status(200).send(resToken)
     } catch (err) {
         console.log(err.message)

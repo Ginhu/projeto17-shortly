@@ -3,7 +3,7 @@ import { validateEmail, validatePassword, validateSignup } from "../middlewares/
 import { userSchema } from "../schemas/users.schemas.js"
 import { getMe, ranking, singup } from "../controllers/user.controller.js"
 import { validateSession } from "../middlewares/auth.validate.js"
-import { random } from "nanoid"
+
 
 const userRouter = Router()
 

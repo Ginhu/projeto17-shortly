@@ -1,5 +1,6 @@
-import {db} from "../database/database.connection.js"
 import bcrypt from "bcrypt"
+import { getUserDataByEmail } from "../repositories/user.repository.js"
+import { getSessionDataByToken } from "../repositories/auth.repository.js"
 
 export function validateSignin(schema) {
     return (req, res, next) => {
@@ -21,7 +22,7 @@ export async function validateEmailPassword (req, res, next) {
     const { email, password } = res.locals
 
     try {
-        const userData = await db.query(`SELECT * FROM users WHERE email=$1`, [email])
+        const userData = await getUserDataByEmail(email)
         if(userData.rowCount === 0) return res.sendStatus(401)
         if(!bcrypt.compareSync(password, userData.rows[0].password)) res.sendStatus(401)
 
@@ -39,10 +40,10 @@ export async function validateSession (req, res, next) {
 
     try { 
         if(!authorization) return res.sendStatus(401)
-        const session = await db.query(`SELECT * FROM sessions WHERE "sessionToken"=$1`, [token])
+        const session = await getSessionDataByToken(token)
         if(session.rowCount === 0) return res.sendStatus(401)
         res.locals.userId = session.rows[0].userId
-        
+    
         next()
     } catch (err) {
         console.log(err.message)

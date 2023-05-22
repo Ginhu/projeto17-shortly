@@ -1,11 +1,11 @@
-import {db} from "../database/database.connection.js"
 import bcrypt from "bcrypt"
+import { getRankingData, getUserData, insertSignup } from "../repositories/user.repository.js"
 
 export async function singup(req, res) {
     const {name, email, password} = res.locals
     const encryptedPw = bcrypt.hashSync(password, 10)
     try {
-        await db.query(`INSERT INTO users (name, email, password) VALUES ($1, $2, $3)`, [name, email, encryptedPw])
+        await insertSignup(name, email, encryptedPw)
         res.sendStatus(201)
     } catch (err) {
         console.log(err.message)
@@ -15,14 +15,10 @@ export async function singup(req, res) {
 
 export async function getMe (req, res) {
     const {userId} = res.locals
-    const id = parseInt(userId)
     let visitCountTotal = 0
     try {
 
-        const userReg = await db.query(`SELECT users.*, urls.id AS "urlId", urls.url, urls."shortUrl", urls."visitCount"
-        FROM users 
-        JOIN urls ON users.id=urls."userId"
-        WHERE users.id=$1;`, [userId])
+        const userReg = await getUserData(userId)
 
         const urls = userReg.rows.map(el=> {
             visitCountTotal +=el.visitCount
@@ -49,12 +45,7 @@ export async function getMe (req, res) {
 
 export async function ranking(req, res) {
     try {
-        const ranking = await db.query(`SELECT users.*, COALESCE(SUM("visitCount"),0) AS visits, COUNT("userId") AS Links 
-        FROM users 
-        LEFT JOIN urls ON users.id=urls."userId" 
-        GROUP BY users.id 
-        ORDER BY visits DESC 
-        LIMIT 10;`)
+        const ranking = await getRankingData()
 
         const body = ranking.rows.map(el=> {
             return {

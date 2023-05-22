@@ -1,4 +1,4 @@
-import {db} from "../database/database.connection.js"
+import { getUserDataByEmail } from "../repositories/user.repository.js"
 
 export function validateSignup(schema) {
     return (req, res, next) => {
@@ -29,7 +29,7 @@ export async function validateEmail (req, res, next) {
     const {email} = res.locals
 
     try {
-        const findEmail = await db.query(`SELECT * FROM users WHERE email=$1`, [email])
+        const findEmail = await getUserDataByEmail(email)
         if(findEmail.rowCount != 0) return res.sendStatus(409)
         next()
     } catch (err) {

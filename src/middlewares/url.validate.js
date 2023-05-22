@@ -1,4 +1,4 @@
-import { db } from "../database/database.connection.js"
+import { getShortUrlData, getUrlDataById } from "../repositories/url.repository.js"
 
 export function validateUrlBody (schema) {
     return (req, res, next) => {
@@ -19,7 +19,7 @@ export async function validateShortUrl (req, res, next) {
     const {shortUrl} = req.params
 
     try {
-        const shortUrlReg = await db.query(`SELECT * FROM urls WHERE "shortUrl"=$1`, [shortUrl])
+        const shortUrlReg = await getShortUrlData(shortUrl)
         if(shortUrlReg.rowCount === 0) return res.sendStatus(404)
         res.locals.urlReg = shortUrlReg.rows[0]
 
@@ -33,7 +33,7 @@ export async function validateUrlById (req, res, next) {
     const {id} = req.params
 
     try {
-        const getUrl = await db.query(`SELECT * FROM urls WHERE id=$1`, [id])
+        const getUrl = await getUrlDataById(id)
         if(getUrl.rowCount === 0) return res.sendStatus(404)
 
         res.locals.id = id
